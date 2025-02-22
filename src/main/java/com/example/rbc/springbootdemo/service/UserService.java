@@ -8,6 +8,8 @@ import com.example.rbc.springbootdemo.mapper.UserMapper;
 import com.example.rbc.springbootdemo.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,10 @@ public class UserService {
 
     @ExecutionTimeLogger
     @Cacheable(value = "usersLazy")
+    @Transactional
     public List<UserDto> findAllUsersLazy(){
+        System.out.println("TransactionSynchronizationManager.isActualTransactionActive()----"+TransactionSynchronizationManager.isActualTransactionActive());
+        System.out.println("TransactionSynchronizationManager.getCurrentTransactionName()----"+TransactionSynchronizationManager.getCurrentTransactionName());
         Optional<List<User>> users = Optional.ofNullable(userRepository.findAll());
         return convertUserToDto(users);
     }

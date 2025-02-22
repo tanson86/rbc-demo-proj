@@ -5,7 +5,10 @@ import com.example.rbc.springbootdemo.dto.UserDto;
 import com.example.rbc.springbootdemo.service.PostService;
 import com.example.rbc.springbootdemo.service.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import java.util.Map;
 @RestController
 @SecurityRequirement(name = "basicAuth")
 public class PostController {
+    private static final Logger LOG = LoggerFactory.getLogger(PostController.class);
 
     private final UserService userService;
     private final PostService postService;
@@ -38,7 +42,8 @@ public class PostController {
 
 
     @GetMapping("/usersEager")
-    public ResponseEntity<List<UserDto>> getAllUserWithPostsEager(){
+    public ResponseEntity<List<UserDto>> getAllUserWithPostsEager(HttpSession session){
+        LOG.info("Count in session is "+(Integer) session.getAttribute("Count"));
         return new ResponseEntity<List<UserDto>>(userService.findAllUsersEager(),HttpStatus.OK);
     }
 
