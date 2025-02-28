@@ -1,0 +1,10 @@
+[
+  {"street": "abc",
+  "code": 123},
+  {"street": "def",
+    "code": 234},
+  {"street": "ghi",
+    "code": 345},
+  {"street": "jkl",
+    "code": 456}
+]

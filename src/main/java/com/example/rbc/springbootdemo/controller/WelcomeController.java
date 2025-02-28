@@ -1,7 +1,7 @@
 package com.example.rbc.springbootdemo.controller;
 
 import com.example.rbc.springbootdemo.controller.util.ImmutableCredentials;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.example.rbc.springbootdemo.kafka.KafkaProducerService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,9 +14,11 @@ import java.security.Principal;
 public class WelcomeController {
 
     private final ImmutableCredentials immutableCredentials;
+    private final KafkaProducerService kafkaProducerService;
 
-    public WelcomeController(ImmutableCredentials immutableCredentials) {
+    public WelcomeController(ImmutableCredentials immutableCredentials, KafkaProducerService kafkaService) {
         this.immutableCredentials = immutableCredentials;
+        this.kafkaProducerService = kafkaService;
     }
 
     @GetMapping("/admin")
@@ -27,9 +29,13 @@ public class WelcomeController {
     }
 
     @GetMapping("/user")
-    @PreAuthorize("hasAuthority('SCOPE_ROLE_USER')")
-    public String user(Principal principal, Authentication auth){
+    //@PreAuthorize("hasAuthority('SCOPE_ROLE_USER')")
+    public String user(Principal principal, Authentication auth) throws InterruptedException {
         //auth.getAuthorities().forEach(System.out::println);
+        for(int i=0;i<2;i++){
+            kafkaProducerService.added();
+            Thread.sleep(2000);
+        }
         return "Welcome user!!! "+principal.getName();
     }
 

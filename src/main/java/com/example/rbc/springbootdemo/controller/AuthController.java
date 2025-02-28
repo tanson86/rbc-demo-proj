@@ -31,7 +31,7 @@ private int counter = 0;
         if(tokenFromRedis.isPresent())
             return tokenFromRedis.get();
         String token = tokenService.generateToken(authentication);
-        session.setAttribute("Token", token);
+        //session.setAttribute("Token", token);
         LOG.info("Token generated {}", token);
         return token;
     }
